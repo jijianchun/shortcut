@@ -1,5 +1,7 @@
 <?php
   header('Access-Control-Allow-Origin:*');
+  // 响应头设置    
+  header('Access-Control-Allow-Headers:x-requested-with,content-type'); 
 
   require('db_config.php');
   $con=mysql_connect($mysql_server_name,$mysql_username,$mysql_password) or die("error connecting") ; //连接数据库
@@ -20,8 +22,8 @@
   }
 
   // 查询快捷键列表
-  if($_POST['m'] == 'query'){
-    $category_id = $_POST['category_id'];
+  if($_REQUEST['m'] == 'query'){
+    $category_id = $_REQUEST['category_id'];
     $sql = "select * from content where category_id='$category_id'";
     $result = mysql_query($sql,$con);
     $arr = array();

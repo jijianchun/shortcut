@@ -3,7 +3,7 @@ import axios from 'axios'
 
 axios.defaults.baseURL = global.AJAX_BASE_URL
 axios.defaults.timeout = 10000
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = false
 
 var Ajax = axios
 

@@ -1,5 +1,5 @@
 export const global = {
-	AJAX_BASE_URL: 'http://project.jameschun.cc/short.php'
+	AJAX_BASE_URL: 'http://project.jameschun.cc'
 }
 
 export default {
