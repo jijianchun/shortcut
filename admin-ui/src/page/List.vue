@@ -15,8 +15,9 @@
 </template>
 
 <script>
-import qs from 'qs'
+import requests from '@/page/requests'
 export default {
+  extends: requests,
   name: 'List',
   data () {
     return {
@@ -27,7 +28,10 @@ export default {
   },
   methods: {
   	search () {
-  		this.$http.post('http://192.168.231.132/mysql/short.php?m=query',qs.stringify(this.form)).then((res) => {
+  		/*this.$http.get('http://project.jameschun.cc/short.php?m=cate_query').then((res) => {
+        console.log(res)
+      })*/
+      this.requests.getCategory().then((res) => {
         console.log(res)
       })
   	}
