@@ -9,11 +9,12 @@
   mysql_select_db($mysql_database); //打开数据库
 
   // 添加快捷键
-  if($_POST['m'] == 'add'){
-    $category_id = $_POST['category_id'];
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $sql = "insert into content (category_id,name,description) VALUES ('$category_id','$name','$description')";
+  if($_REQUEST['m'] == 'add'){
+    $category_id = $_REQUEST['category_id'];
+    $name = $_REQUEST['name'];
+    $description = $_REQUEST['description'];
+    $time = time();
+    $sql = "insert into content (category_id,name,description,time) VALUES ('$category_id','$name','$description','$time')";
     if(!mysql_query($sql,$con)){
       echo json_encode(array('status'=>'false','msg'=>mysql_error()));
       exit;

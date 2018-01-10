@@ -3,7 +3,7 @@
     <el-form ref="form" label-width="100px" size="mini" style="width:400px;">
     	<el-form-item label="快捷键分类:">
     		<el-select v-model="form.category_id" placeholder="请选择快捷键分类" style="width:200px;">
-    			<el-option v-for="item in categorys" :label="item.name" :value="item.id"></el-option>
+    			<el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
     		</el-select>
     	</el-form-item>
     	<el-form-item>

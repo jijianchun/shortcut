@@ -3,8 +3,7 @@
     <el-form ref="form" label-width="100px" size="mini">
     	<el-form-item label="快捷键分类:">
     		<el-select v-model="form.category_id" placeholder="请选择快捷键分类" style="width:200px;">
-    			<el-option label="sublime" value="1"></el-option>
-    			<el-option label="webstorm" value="2"></el-option>
+    			<el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
     		</el-select>
     	</el-form-item>
     	<el-form-item label="快捷键名称:">
@@ -21,11 +20,13 @@
 </template>
 
 <script>
-import qs from 'qs'
+import requests from '@/page/requests'
 export default {
+  extends: requests,
   name: 'Home',
   data () {
     return {
+      categorys: [],
       form: {
         category_id: '',
         name: '',
@@ -33,9 +34,17 @@ export default {
       }
     }
   },
+  mounted () {
+    this.getCategory()
+  },
   methods: {
+    getCategory () {
+      this.requests.getCategory({m:'cate_query'}).then((res) => {
+        this.categorys = res.data
+      })
+    },
   	addShort () {
-  		this.$http.post('http://192.168.231.132/mysql/short.php?m=add',qs.stringify(this.form)).then((res) => {
+  		this.requests.addShort(Object.assign({m:'add'},this.form)).then((res) => {
         console.log(res)
       })
   	}
