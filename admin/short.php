@@ -1,7 +1,11 @@
 <?php
   header('Access-Control-Allow-Origin:*');
+  // header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
   // 响应头设置    
   header('Access-Control-Allow-Headers:x-requested-with,content-type'); 
+  if (strtolower($_SERVER['REQUEST_METHOD']) == 'options') {
+    exit;
+  }
 
   require('db_config.php');
   $con=mysql_connect($mysql_server_name,$mysql_username,$mysql_password) or die("error connecting") ; //连接数据库

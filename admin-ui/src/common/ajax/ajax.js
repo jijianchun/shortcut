@@ -6,6 +6,7 @@ axios.interceptors.request.use(config => {
 	if (config.method === 'get' || config.method === 'delete' || config.method === 'post') {
       config.params = config.data
     }
+    console.log(config)
     return config
 }, error => {
   // 对请求错误做些什么
