@@ -18,7 +18,17 @@
       <el-table-column prop="description" label="功能介绍"></el-table-column>
       <el-table-column prop="time" label="添加时间"></el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="pageSizeChange"
+      @current-change="currentPageChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 25, 50]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalNum">
+    </el-pagination>
 
+    <!-- 添加short -->
     <el-dialog title="添加short" :visible.sync="addShortDialog" width="500px">
       <el-form ref="form" label-width="100px" size="mini">
         <el-form-item label="快捷键分类:">
@@ -47,6 +57,9 @@ export default {
   name: 'Home',
   data () {
     return {
+      currentPage: 1,
+      pageSize: 10,
+      totalNum: 0,
       tableData: [],
       addShortDialog: false,
       categorys: [],
@@ -61,6 +74,18 @@ export default {
     this.getCategory()
   },
   methods: {
+    getList () {
+      let params = {
+        pageSize: this.pageSize,
+        pageNo: this.currentPage - 1,
+        m: 'query',
+        category_id: this.form.category_id
+      }
+      this.requests.getShorts(params).then((res) => {
+        this.tableData = res.data
+        this.totalNum = res.total
+      })
+    },
     getCategory () {
       this.requests.getCategory({m:'cate_query'}).then((res) => {
         this.categorys = res.data
@@ -72,10 +97,22 @@ export default {
       })
   	},
     search () {
-      this.requests.getShorts({m:'query',category_id:this.form.category_id}).then((res) => {
-        this.tableData = res.data
-      })
-    }
+      this.getList()
+    },
+    /**
+       * @description 监听每页展示条数改变
+       */
+      pageSizeChange (pagesize) {
+        this.pageSize = pagesize
+        this.getList()
+      },
+      /**
+       * @description 监听当前页码改变
+       */
+      currentPageChange (currentpage) {
+        this.currentPage = currentpage
+        this.getList()
+      }
   }
 }
 </script>
