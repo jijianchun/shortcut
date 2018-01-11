@@ -20,7 +20,20 @@
     $time = time();
     $sql = "insert into content (category_id,name,description,time) VALUES ('$category_id','$name','$description','$time')";
     if(!mysql_query($sql,$con)){
-      echo json_encode(array('status'=>'false','msg'=>mysql_error()));
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
+      exit;
+    }
+    echo json_encode(array('status'=>true));
+  }
+
+  // 修改快捷键
+  if($_REQUEST['m'] == 'modify'){
+    $category_id = $_REQUEST['category_id'];
+    $name = $_REQUEST['name'];
+    $description = $_REQUEST['description'];
+    $sql = "update content set name='$name',description='$description' where category_id='$category_id'";
+    if(!mysql_query($sql,$con)){
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
       exit;
     }
     echo json_encode(array('status'=>true));
