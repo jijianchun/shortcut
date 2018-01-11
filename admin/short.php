@@ -20,7 +20,20 @@
     $time = time();
     $sql = "insert into content (category_id,name,description,time) VALUES ('$category_id','$name','$description','$time')";
     if(!mysql_query($sql,$con)){
-      echo json_encode(array('status'=>'false','msg'=>mysql_error()));
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
+      exit;
+    }
+    echo json_encode(array('status'=>true));
+  }
+
+  // 修改快捷键
+  if($_REQUEST['m'] == 'modify'){
+    $category_id = $_REQUEST['category_id'];
+    $name = $_REQUEST['name'];
+    $description = $_REQUEST['description'];
+    $sql = "update content set name='$name',description='$description' where category_id='$category_id'";
+    if(!mysql_query($sql,$con)){
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
       exit;
     }
     echo json_encode(array('status'=>true));
@@ -29,13 +42,19 @@
   // 查询快捷键列表
   if($_REQUEST['m'] == 'query'){
     $category_id = $_REQUEST['category_id'];
-    $sql = "select * from content where category_id='$category_id'";
+    $pageSize = $_REQUEST['pageSize'];
+    $pageNo = $_REQUEST['pageNo'];
+    $start = $pageNo*$pageSize;
+    $sql = "select * from content where category_id='$category_id' limit $start,$pageSize";
     $result = mysql_query($sql,$con);
     $arr = array();
     while($row = mysql_fetch_assoc($result)){
       $arr[] = $row;
     }
-    echo json_encode(array('status'=>true,'data'=>$arr));
+    $sql = "select count(*) as total from content where category_id='$category_id'";
+    $total = mysql_query($sql,$con);
+    $total = intval(mysql_fetch_row($total)[0]);
+    echo json_encode(array('status'=>true,'data'=>$arr,'total'=>$total));
   }
 
   // 查询快捷键分类列表
