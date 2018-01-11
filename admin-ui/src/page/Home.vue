@@ -148,7 +148,16 @@ export default {
             description: this.editShortForm.description
           }
           this.requests.getCategory(params).then((res) => {
-            console.log(res)
+            if (res.status) {
+              this.$message({
+                message: '编辑成功',
+                type: 'success'
+              })
+              this.editShortDialog = false
+              this.getList()
+            } else {
+              this.$message.error(res.message)
+            }
           })
         }
       })
