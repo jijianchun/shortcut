@@ -1,15 +1,7 @@
 <template>
   <div class="hello">
-    <el-form ref="form" label-width="100px" size="small" :inline="true">
-      <el-form-item label="快捷键分类:">
-        <el-select v-model="searchForm.category_id" placeholder="请选择快捷键分类" style="width:200px;">
-          <el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
     <p style="text-align:right">
-      <el-button type="primary" @click="search" size="small">查询</el-button>
-      <el-button type="primary" @click="addShortDialog=true" size="small">新增short</el-button>
+      <el-button type="primary" @click="addCategoryDialog=true" size="small">新增category</el-button>
     </p>
 
     <el-table :data="tableData" style="width: 100%">
@@ -33,42 +25,26 @@
       :total="totalNum">
     </el-pagination>
 
-    <!-- 添加short -->
-    <el-dialog title="添加short" :visible.sync="addShortDialog" width="500px" @close="closeDialog('add')">
-      <el-form :model="addShortForm" label-width="100px" size="mini" :rules="validAddShortForm" ref="validAddShortForm">
-        <el-form-item label="快捷键分类:" prop="category_id">
-          <el-select v-model="addShortForm.category_id" placeholder="请选择快捷键分类" style="width:200px;">
-            <el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
+    <!-- 添加category -->
+    <el-dialog title="添加short" :visible.sync="addCategoryDialog" width="500px" @close="closeDialog('add')">
+      <el-form :model="addCategoryForm" label-width="100px" size="mini" :rules="validAddCategoryForm" ref="validAddCategoryForm">
         <el-form-item label="快捷键名称:" prop="name">
-          <el-input v-model="addShortForm.name" style="width:200px;"></el-input>
-        </el-form-item>
-        <el-form-item label="快捷键描述:" prop="description">
-          <el-input type=textarea v-model="addShortForm.description" style="width:200px;"></el-input>
+          <el-input v-model="addCategoryForm.name" style="width:200px;"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addShort">添加</el-button>
+          <el-button type="primary" @click="addCategory">添加</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
-    <!-- 编辑short -->
-    <el-dialog title="编辑short" :visible.sync="editShortDialog" width="500px" @close="closeDialog('edit')">
-      <el-form :model="editShortForm" label-width="100px" size="mini" :rules="validEditShortForm" ref="validEditShortForm">
-        <el-form-item label="快捷键分类:" prop="category_id">
-          <el-select v-model="editShortForm.category_id" placeholder="请选择快捷键分类" style="width:200px;">
-            <el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
+    <!-- 编辑category -->
+    <el-dialog title="编辑short" :visible.sync="editCategoryDialog" width="500px" @close="closeDialog('edit')">
+      <el-form :model="editCategoryForm" label-width="100px" size="mini" :rules="validEditCategoryForm" ref="validEditCategoryForm">
         <el-form-item label="快捷键名称:" prop="name">
-          <el-input v-model="editShortForm.name" style="width:200px;"></el-input>
-        </el-form-item>
-        <el-form-item label="快捷键描述:" prop="description">
-          <el-input type=textarea v-model="editShortForm.description" style="width:200px;"></el-input>
+          <el-input v-model="editCategoryForm.name" style="width:200px;"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="editShortDialog = false">取消</el-button>
-          <el-button type="primary" @click="editShort">保存</el-button>
+          <el-button @click="editCategoryDialog = false">取消</el-button>
+          <el-button type="primary" @click="editCategory">保存</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -79,55 +55,35 @@
 import requests from '@/page/requests'
 export default {
   extends: requests,
-  name: 'Short',
+  name: 'Category',
   data () {
     return {
       currentPage: 1,
       pageSize: 10,
       totalNum: 0,
       tableData: [],
-      addShortDialog: false,
-      categorys: [],
-      searchForm: {
-        category_id: ''
+      addCategoryDialog: false,
+      addCategoryForm: {
+        name: ''
       },
-      addShortForm: {
-        category_id: '',
-        name: '',
-        description: ''
+      editCategoryDialog: false,
+      editCategoryForm: {
+        name: ''
       },
-      editShortDialog: false,
-      editShortForm: {
-        category_id: '',
-        name: '',
-        description: ''
-      },
-      validAddShortForm: {
-        category_id: [
-          { required: true, message: '分类不能为空', trigger: 'change' }
-        ],
+      validAddCategoryForm: {
         name: [
           { required: true, message: '名称不能为空', trigger: 'change' }
-        ],
-        description: [
-          { required: true, message: '描述不能为空', trigger: 'change' }
         ]
       },
-      validEditShortForm: {
-        category_id: [
-          { required: true, message: '分类不能为空', trigger: 'change' }
-        ],
+      validEditCategoryForm: {
         name: [
           { required: true, message: '名称不能为空', trigger: 'change' }
-        ],
-        description: [
-          { required: true, message: '描述不能为空', trigger: 'change' }
         ]
       }
     }
   },
   mounted () {
-    this.getCategory()
+    
   },
   methods: {
     toEditShort (item) {
@@ -174,21 +130,16 @@ export default {
         this.totalNum = res.total
       })
     },
-    getCategory () {
-      this.requests.getCategory({m:'cate_query'}).then((res) => {
-        this.categorys = res.data
-      })
-    },
-  	addShort () {
-      this.$refs['validAddShortForm'].validate((valid) => {
+  	addCategory () {
+      this.$refs['validAddCategoryForm'].validate((valid) => {
         if (valid) {
-          this.requests.addShort(Object.assign({m:'add'},this.addShortForm)).then((res) => {
+          this.requests.addCategory(Object.assign({m:'add'},this.addShortForm)).then((res) => {
             if (res.status) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
               })
-              this.addShortDialog = false
+              this.addCategoryDialog = false
               this.getList()
             } else {
               this.$message.error(res.message)
@@ -196,11 +147,7 @@ export default {
           })
         }
       })
-  		
   	},
-    search () {
-      this.getList()
-    },
     closeDialog (type) {
       if (type == 'add') {
         this.$refs['validAddShortForm'].clearValidate()

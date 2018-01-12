@@ -4,6 +4,10 @@ export default {
   data () {
     return {
       requests: {
+        // 添加分类(待完成)
+        addCategory: (...params) => axios.ajax('/short.php', 'post', ...params),
+        // 编辑分类(待完成)
+        editCategory: (...params) => axios.ajax('/short.php', 'post', ...params),
       	// 获取分类
         getCategory: (fields) => axios.ajax('/short.php', 'get', fields),
         // 获取某个分类下的列表
