@@ -1,21 +1,22 @@
 <template>
   <div id="app">
+  	<v-header></v-header>
     <router-view/>
   </div>
 </template>
 
 <script>
+import headWrap from '@/components/header/head'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+  	vHeader: headWrap
+  }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
+
 }
 </style>

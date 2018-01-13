@@ -24,6 +24,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      class="pager"
       @size-change="pageSizeChange"
       @current-change="currentPageChange"
       :current-page="currentPage"
@@ -230,4 +231,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	.hello { padding:0 10px; }
+  .pager {
+    margin-top:20px;
+    text-align: right;
+  }
 </style>

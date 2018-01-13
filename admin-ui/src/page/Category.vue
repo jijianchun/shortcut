@@ -7,15 +7,15 @@
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="description" label="功能介绍"></el-table-column>
       <el-table-column prop="time" label="添加时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="toEditShort(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="toEditCategory(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
+      class="pager"
       @size-change="pageSizeChange"
       @current-change="currentPageChange"
       :current-page="currentPage"
@@ -68,6 +68,7 @@ export default {
       },
       editCategoryDialog: false,
       editCategoryForm: {
+        id: '',
         name: ''
       },
       validAddCategoryForm: {
@@ -83,33 +84,31 @@ export default {
     }
   },
   mounted () {
-    
+    this.getList()
   },
   methods: {
-    toEditShort (item) {
-      this.editShortForm = {
-        category_id: item.category_id,
-        name: item.name,
-        description: item.description
+    toEditCategory (item) {
+      this.editCategoryForm = {
+        id: item.id,
+        name: item.name
       }
-      this.editShortDialog = true
+      this.editCategoryDialog = true
     },
-    editShort () {
-      this.$refs['validEditShortForm'].validate((valid) => {
+    editCategory () {
+      this.$refs['validEditCategoryForm'].validate((valid) => {
         if (valid) {
           let params = {
-            m: 'modify',
-            category_id: this.editShortForm.category_id,
-            name: this.editShortForm.name,
-            description: this.editShortForm.description
+            m: 'cate_modify',
+            id: this.editCategoryForm.id,
+            name: this.editCategoryForm.name
           }
-          this.requests.getCategory(params).then((res) => {
+          this.requests.editCategory(params).then((res) => {
             if (res.status) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
               })
-              this.editShortDialog = false
+              this.editCategoryDialog = false
               this.getList()
             } else {
               this.$message.error(res.message)
@@ -122,10 +121,9 @@ export default {
       let params = {
         pageSize: this.pageSize,
         pageNo: this.currentPage - 1,
-        m: 'query',
-        category_id: this.searchForm.category_id
+        m: 'cate_query'
       }
-      this.requests.getShorts(params).then((res) => {
+      this.requests.getCategory(params).then((res) => {
         this.tableData = res.data
         this.totalNum = res.total
       })
@@ -133,7 +131,7 @@ export default {
   	addCategory () {
       this.$refs['validAddCategoryForm'].validate((valid) => {
         if (valid) {
-          this.requests.addCategory(Object.assign({m:'add'},this.addShortForm)).then((res) => {
+          this.requests.addCategory(Object.assign({m:'cate_add'},this.addCategoryForm)).then((res) => {
             if (res.status) {
               this.$message({
                 message: '添加成功',
@@ -150,11 +148,9 @@ export default {
   	},
     closeDialog (type) {
       if (type == 'add') {
-        this.$refs['validAddShortForm'].clearValidate()
-        this.addShortForm = {
-          category_id: '',
-          name: '',
-          description: ''
+        this.$refs['validAddCategoryForm'].clearValidate()
+        this.addCategoryForm = {
+          name: ''
         }
       }
     },
@@ -177,4 +173,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	.hello { padding:0 10px; }
+  .pager {
+    margin-top:20px;
+    text-align: right;
+  }
 </style>

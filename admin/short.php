@@ -57,15 +57,50 @@
     echo json_encode(array('status'=>true,'data'=>$arr,'total'=>$total));
   }
 
-  // 查询快捷键分类列表
+  // 查询分类列表
   if($_GET['m'] == 'cate_query'){
-    $sql = "select * from category";
+    $pageSize = $_REQUEST['pageSize'];
+    $pageNo = $_REQUEST['pageNo'];
+    $start = $pageNo * $pageSize;
+    if ($pageSize) {
+      $sql = "select * from category limit $start,$pageSize";
+    } else {
+      $sql = "select * from category";
+    }
+    
     $result = mysql_query($sql,$con);
     $arr = array();
     while($row = mysql_fetch_assoc($result)){
       $arr[] = $row;
     }
-    echo json_encode(array('status'=>true,'data'=>$arr));
+    $sql = "select count(*) as total from category";
+    $total = mysql_query($sql,$con);
+    $total = intval(mysql_fetch_row($total)[0]);
+    echo json_encode(array('status'=>true,'data'=>$arr,'total'=>$total));
+  }
+
+  // 添加分类
+  if($_REQUEST['m'] == 'cate_add'){
+    $name = $_REQUEST['name'];
+    $time = time();
+    $sql = "insert into category (name,time) VALUES ('$name','$time')";
+    if(!mysql_query($sql,$con)){
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
+      exit;
+    }
+    echo json_encode(array('status'=>true));
+  }
+
+  // 修改分类
+  if($_REQUEST['m'] == 'cate_modify'){
+    $id = $_REQUEST['id'];
+    $name = $_REQUEST['name'];
+    $sql = "update category set name='$name' where id='$id'";
+    if(!mysql_query($sql,$con)){
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
+      exit;
+    }
+    echo json_encode(array('status'=>true));
   }
 
   mysql_close($con);
