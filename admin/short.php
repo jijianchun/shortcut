@@ -39,6 +39,17 @@
     echo json_encode(array('status'=>true));
   }
 
+  // 删除快捷键
+  if($_REQUEST['m'] == 'del'){
+    $id = $_REQUEST['id'];
+    $sql = "delete from content where id='$id'";
+    if(!mysql_query($sql,$con)){
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
+      exit;
+    }
+    echo json_encode(array('status'=>true));
+  }
+
   // 查询快捷键列表
   if($_REQUEST['m'] == 'query'){
     $category_id = $_REQUEST['category_id'];
@@ -96,6 +107,24 @@
     $id = $_REQUEST['id'];
     $name = $_REQUEST['name'];
     $sql = "update category set name='$name' where id='$id'";
+    if(!mysql_query($sql,$con)){
+      echo json_encode(array('status'=>false,'msg'=>mysql_error()));
+      exit;
+    }
+    echo json_encode(array('status'=>true));
+  }
+
+  // 删除分类
+  if($_REQUEST['m'] == 'cate_del'){
+    $id = $_REQUEST['id'];
+    $sql = "select count(*) as total from content where category_id='$id'";
+    $total = mysql_query($sql,$con);
+    $total = intval(mysql_fetch_row($total)[0]);
+    if($total > 0) {
+      echo json_encode(array('status'=>false,'msg'=>'该分类下有关联快捷键，请先删除分类下所有快捷键再尝试'));
+      exit;
+    }
+    $sql = "delete from category where id='$id'";
     if(!mysql_query($sql,$con)){
       echo json_encode(array('status'=>false,'msg'=>mysql_error()));
       exit;

@@ -11,6 +11,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="toEditCategory(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="toDelCategory(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,6 +88,31 @@ export default {
     this.getList()
   },
   methods: {
+    toDelCategory (item) {
+      this.$confirm('此操作将永久删除该条记录，是否继续?','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          m: 'cate_del',
+          id: item.id
+        }
+        this.requests.delCategory(params).then((res) => {
+          if (res.status) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+      }).catch(() => {
+        
+      })
+    },
     toEditCategory (item) {
       this.editCategoryForm = {
         id: item.id,

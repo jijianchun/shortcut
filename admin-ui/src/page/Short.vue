@@ -20,6 +20,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="toEditShort(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="toDelShort(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -131,6 +132,31 @@ export default {
     this.getCategory()
   },
   methods: {
+    toDelShort (item) {
+      this.$confirm('此操作将永久删除该条记录，是否继续?','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          m: 'del',
+          id: item.id
+        }
+        this.requests.delShort(params).then((res) => {
+          if (res.status) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message.error(res.message)
+          }
+        })
+      }).catch(() => {
+        
+      })
+    },
     toEditShort (item) {
       this.editShortForm = {
         category_id: item.category_id,
