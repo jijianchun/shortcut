@@ -28,10 +28,11 @@
 
   // 修改快捷键
   if($_REQUEST['m'] == 'modify'){
+    $id = $_REQUEST['id'];
     $category_id = $_REQUEST['category_id'];
     $name = $_REQUEST['name'];
     $description = $_REQUEST['description'];
-    $sql = "update content set name='$name',description='$description' where category_id='$category_id'";
+    $sql = "update content set name='$name',description='$description',category_id='$category_id' where id='$id'";
     if(!mysql_query($sql,$con)){
       echo json_encode(array('status'=>false,'msg'=>mysql_error()));
       exit;

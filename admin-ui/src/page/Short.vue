@@ -100,6 +100,7 @@ export default {
       },
       editShortDialog: false,
       editShortForm: {
+        id: '',
         category_id: '',
         name: '',
         description: ''
@@ -161,6 +162,7 @@ export default {
     // 去编辑
     toEditShort (item) {
       this.editShortForm = {
+        id: item.id,
         category_id: item.category_id,
         name: item.name,
         description: item.description
@@ -173,11 +175,12 @@ export default {
         if (valid) {
           let params = {
             m: 'modify',
+            id: this.editShortForm.id,
             category_id: this.editShortForm.category_id,
             name: this.editShortForm.name,
             description: this.editShortForm.description
           }
-          this.requests.getCategory(params).then((res) => {
+          this.requests.editShort(params).then((res) => {
             if (res.status) {
               this.$message({
                 message: '编辑成功',
