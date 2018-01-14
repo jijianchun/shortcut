@@ -7,7 +7,7 @@
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="time" label="添加时间"></el-table-column>
+      <el-table-column prop="time" label="添加时间" :formatter="dateFormatter"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="toEditCategory(scope.row)">编辑</el-button>
@@ -191,6 +191,12 @@ export default {
     currentPageChange (currentpage) {
       this.currentPage = currentpage
       this.getList()
+    },
+    // 日期格式化
+    dateFormatter (row,column,cellValue) {
+      let time = cellValue * 1000
+      let date = new Date(time)
+      return date.getFullYear() + '-' + this.utils().toDouble((date.getMonth()+1)) + '-' + this.utils().toDouble(date.getDate()) + ' ' + this.utils().toDouble(date.getHours()) + ':' + this.utils().toDouble(date.getMinutes()) + ':' + this.utils().toDouble(date.getSeconds())
     }
   }
 }

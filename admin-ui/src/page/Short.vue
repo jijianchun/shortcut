@@ -16,7 +16,7 @@
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="description" label="功能介绍"></el-table-column>
-      <el-table-column prop="time" label="添加时间"></el-table-column>
+      <el-table-column prop="time" label="添加时间" :formatter="dateFormatter"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="toEditShort(scope.row)">编辑</el-button>
@@ -132,6 +132,7 @@ export default {
     this.getCategory()
   },
   methods: {
+    // 删除一条内容
     toDelShort (item) {
       this.$confirm('此操作将永久删除该条记录，是否继续?','提示',{
         confirmButtonText: '确定',
@@ -154,9 +155,10 @@ export default {
           }
         })
       }).catch(() => {
-        
+
       })
     },
+    // 去编辑
     toEditShort (item) {
       this.editShortForm = {
         category_id: item.category_id,
@@ -165,6 +167,7 @@ export default {
       }
       this.editShortDialog = true
     },
+    // 编辑一条内容
     editShort () {
       this.$refs['validEditShortForm'].validate((valid) => {
         if (valid) {
@@ -189,6 +192,7 @@ export default {
         }
       })
     },
+    // 查询列表
     getList () {
       let params = {
         pageSize: this.pageSize,
@@ -201,11 +205,13 @@ export default {
         this.totalNum = res.total
       })
     },
+    // 获取分类列表
     getCategory () {
       this.requests.getCategory({m:'cate_query'}).then((res) => {
         this.categorys = res.data
       })
     },
+    // 添加一条内容
   	addShort () {
       this.$refs['validAddShortForm'].validate((valid) => {
         if (valid) {
@@ -249,6 +255,12 @@ export default {
     currentPageChange (currentpage) {
       this.currentPage = currentpage
       this.getList()
+    },
+    // 日期格式化
+    dateFormatter (row,column,cellValue) {
+      let time = cellValue * 1000
+      let date = new Date(time)
+      return date.getFullYear() + '-' + this.utils().toDouble((date.getMonth()+1)) + '-' + this.utils().toDouble(date.getDate()) + ' ' + this.utils().toDouble(date.getHours()) + ':' + this.utils().toDouble(date.getMinutes()) + ':' + this.utils().toDouble(date.getSeconds())
     }
   }
 }

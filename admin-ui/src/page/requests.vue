@@ -1,5 +1,6 @@
 <script>
 import axios from '@/common/ajax/ajax'
+import utils from '@/common/lib/utils'
 export default {
   data () {
     return {
@@ -21,6 +22,11 @@ export default {
         // 删除内容
         delShort: (...params) => axios.ajax('/short.php', 'post', ...params)
       }
+    }
+  },
+  methods: {
+    utils() {
+      return utils
     }
   }
 }
