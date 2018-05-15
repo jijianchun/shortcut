@@ -5,16 +5,16 @@ export default {
   data () {
     return {
       requests: {
+        // 获取分类
+        getCategory: (fields) => axios.ajax('Index/query_category_list', 'get', fields),
         // 添加分类
-        addCategory: (...params) => axios.ajax('/short.php', 'post', ...params),
+        addCategory: (...params) => axios.ajax('Index/cate_add', 'post', ...params),
         // 编辑分类
-        editCategory: (...params) => axios.ajax('/short.php', 'post', ...params),
-      	// 获取分类
-        getCategory: (fields) => axios.ajax('/short.php', 'get', fields),
+        editCategory: (...params) => axios.ajax('Index/cate_modify', 'post', ...params),
         // 删除分类
-        delCategory: (...params) => axios.ajax('/short.php', 'post', ...params),
+        delCategory: (...params) => axios.ajax('Index/cate_del', 'get', ...params),
         // 获取某个分类下的列表
-        getShorts: (...params) => axios.ajax('/short.php', 'post', ...params),
+        getShorts: (...params) => axios.ajax('Index/query', 'get', ...params),
         // 添加内容
         addShort: (...params) => axios.ajax('/short.php', 'post', ...params),
         // 修改内容

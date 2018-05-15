@@ -199,8 +199,7 @@ export default {
     getList () {
       let params = {
         pageSize: this.pageSize,
-        pageNo: this.currentPage - 1,
-        m: 'query',
+        pageNo: this.currentPage,
         category_id: this.searchForm.category_id
       }
       this.requests.getShorts(params).then((res) => {
@@ -232,7 +231,7 @@ export default {
           })
         }
       })
-  		
+
   	},
     search () {
       this.getList()

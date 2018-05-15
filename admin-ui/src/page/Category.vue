@@ -95,7 +95,6 @@ export default {
         type: 'warning'
       }).then(() => {
         let params = {
-          m: 'cate_del',
           id: item.id
         }
         this.requests.delCategory(params).then((res) => {
@@ -110,7 +109,7 @@ export default {
           }
         })
       }).catch(() => {
-        
+
       })
     },
     toEditCategory (item) {
@@ -124,7 +123,6 @@ export default {
       this.$refs['validEditCategoryForm'].validate((valid) => {
         if (valid) {
           let params = {
-            m: 'cate_modify',
             id: this.editCategoryForm.id,
             name: this.editCategoryForm.name
           }
@@ -146,8 +144,7 @@ export default {
     getList () {
       let params = {
         pageSize: this.pageSize,
-        pageNo: this.currentPage - 1,
-        m: 'cate_query'
+        pageNo: this.currentPage
       }
       this.requests.getCategory(params).then((res) => {
         this.tableData = res.data
@@ -157,7 +154,7 @@ export default {
   	addCategory () {
       this.$refs['validAddCategoryForm'].validate((valid) => {
         if (valid) {
-          this.requests.addCategory(Object.assign({m:'cate_add'},this.addCategoryForm)).then((res) => {
+          this.requests.addCategory(this.addCategoryForm).then((res) => {
             if (res.status) {
               this.$message({
                 message: '添加成功',
