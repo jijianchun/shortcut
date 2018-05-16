@@ -141,7 +141,6 @@ export default {
         type: 'warning'
       }).then(() => {
         let params = {
-          m: 'del',
           id: item.id
         }
         this.requests.delShort(params).then((res) => {
@@ -174,7 +173,6 @@ export default {
       this.$refs['validEditShortForm'].validate((valid) => {
         if (valid) {
           let params = {
-            m: 'modify',
             id: this.editShortForm.id,
             category_id: this.editShortForm.category_id,
             name: this.editShortForm.name,
@@ -217,7 +215,7 @@ export default {
   	addShort () {
       this.$refs['validAddShortForm'].validate((valid) => {
         if (valid) {
-          this.requests.addShort(Object.assign({m:'add'},this.addShortForm)).then((res) => {
+          this.requests.addShort(this.addShortForm).then((res) => {
             if (res.status) {
               this.$message({
                 message: '添加成功',

@@ -16,11 +16,11 @@ export default {
         // 获取某个分类下的列表
         getShorts: (...params) => axios.ajax('Index/query', 'get', ...params),
         // 添加内容
-        addShort: (...params) => axios.ajax('/short.php', 'post', ...params),
+        addShort: (...params) => axios.ajax('Index/add', 'post', ...params),
         // 修改内容
-        editShort: (...params) => axios.ajax('/short.php', 'post', ...params),
+        editShort: (...params) => axios.ajax('Index/modify', 'post', ...params),
         // 删除内容
-        delShort: (...params) => axios.ajax('/short.php', 'post', ...params)
+        delShort: (...params) => axios.ajax('Index/del', 'get', ...params)
       }
     }
   },
